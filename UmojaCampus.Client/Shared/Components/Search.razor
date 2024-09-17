@@ -1,0 +1,67 @@
+﻿<div class="row">
+    <div class="col-md-6 mb-3">
+        <div class="input-group">
+          <div class="form-outline">
+            <input type="text"
+                @bind="this.SearchTerm"
+                @onkeyup="SearchBoxKeyPress"
+                @oninput="OnInput"
+                class="form-control form-control-lg"
+                placeholder="Search..."/>
+      
+          </div>
+          <button type="button" 
+              class="btn btn-primary @SearchCssClass"
+              @onclick="SearchClick">
+            <i class="fas fa-search"></i>
+            Search
+          </button>
+            <button type="button"
+                    class="btn btn-danger @ClearCssClass"
+                    @onclick="ClearSearch">
+                <i class="fa-solid fa-xmark"></i>
+                Clear
+            </button>
+        </div>
+    </div>
+</div>
+
+@code{
+    [Parameter]
+    public string SearchInput { get; set;  }
+
+    [Parameter]
+    public Action<string> SearchChanged { get; set; }
+
+    private string SearchTerm { get; set; } = string.Empty;
+    private bool ButtonSearch = true;
+    private string SearchCssClass => ButtonSearch ? "d-inline" : "d-none";
+    private string ClearCssClass => ButtonSearch ? "d-none" : "d-inline";
+
+    protected void SearchBoxKeyPress(KeyboardEventArgs evt)
+    {
+        if (evt.Key == "Enter")
+            SearchClick();
+    }
+
+    protected void OnInput(ChangeEventArgs evt)
+    {
+        SearchTerm = evt.Value.ToString();
+        if (string.IsNullOrEmpty(SearchTerm))
+            ClearSearch();
+    }
+
+    protected void SearchClick()
+    {
+        ButtonSearch = string.IsNullOrEmpty(SearchTerm) ? true : false;
+        SearchChanged?.Invoke(SearchTerm);
+    }
+
+    protected void ClearSearch()
+    {
+        SearchTerm = string.Empty;
+        ButtonSearch = string.IsNullOrEmpty(SearchTerm) ? true : false;
+        SearchChanged?.Invoke(SearchTerm);
+    }
+}
+

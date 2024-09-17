@@ -1,0 +1,30 @@
+﻿@using System.Net.Http
+@using System.Net.Http.Json
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@using Microsoft.AspNetCore.Components.WebAssembly.Http
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using BlazorDownloadFile
+@using Microsoft.JSInterop
+@using UmojaCampus.Client
+@using UmojaCampus.Client.Helpers
+@using UmojaCampus.Client.Shared.Layout
+@using UmojaCampus.Client.Shared.Components
+@using UmojaCampus.Shared.DTO
+@using UmojaCampus.Shared.DTO.Account
+@using UmojaCampus.Shared.DTO.Inputs
+@using UmojaCampus.Shared.DTO.Outputs
+@using UmojaCampus.Client.AuthProvider
+@using UmojaCampus.Client.Services.Contracts
+@using UmojaCampus.Shared.Resources
+
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthStateProvider
+@inject IUserAccountService AccountService
+@inject GetHttpClient _httpClient
+@inject IBlazorDownloadFileService BlazorDownloadFileService
+@inject JsInterop JsInterop

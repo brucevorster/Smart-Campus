@@ -1,0 +1,64 @@
+﻿<style>
+	.custom {
+		top:50px;
+		right:0px;
+	}
+</style>
+<nav class="navbar navbar-expand navbar-light navbar-bg">
+	<a class="sidebar-toggle js-sidebar-toggle">
+		<i class="hamburger align-self-center"></i>
+	</a>
+
+	<div class="navbar-collapse collapse">
+		<ul class="navbar-nav navbar-align">
+			<AuthorizeView>
+				<Authorized>
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle d-none d-sm-inline-block" 
+							href="#" 
+							data-bs-toggle="dropdown"
+							@onclick="ToggleDropdown">
+							<span class="text-dark">
+								Hello, @context.User.Identity.Name
+							</span>
+						</a>
+						<div class="dropdown-menu dropdown-menu-end custom @dropdownCssClass">
+							<a class="dropdown-item" href="pages-profile.html"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" @onclick="HandleLogout">Log out</a>
+						</div>
+					</li>
+				</Authorized>
+				<NotAuthorized>
+					<li class="nav-item">
+						<a class="nav-link" 
+							href="account/login">
+							<i class="fa-solid fa-arrow-right-to-bracket"></i>
+							Login
+						</a>
+					</li>
+				</NotAuthorized>
+			</AuthorizeView>
+		</ul>
+	</div>
+</nav>
+
+@code
+{
+	private bool showDropdown = false;
+	private string dropdownCssClass => showDropdown ? "show" : "null";
+
+	private void ToggleDropdown()
+	{
+		showDropdown = !showDropdown;
+	}
+	private async Task HandleLogout()
+	{
+		var logoutModel = new AccessToken();
+		var authStateProvider = (CustomAuthStateProvider)AuthStateProvider;
+
+		await authStateProvider.UpdateAuthenticationState(logoutModel);
+		NavigationManager.NavigateTo("/account/login", forceLoad: true);
+	}
+}
+

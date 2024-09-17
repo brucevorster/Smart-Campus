@@ -1,0 +1,29 @@
+﻿<p>Redirecting to login...</p>
+
+@* @code {
+    protected override void OnInitialized()
+    {
+        NavigationManager.NavigateTo("/acount/login", forceLoad: true);
+
+        // var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        // var user = authState.User;
+
+        // if (!user.Identity.IsAuthenticated)
+        // {
+        //     NavigationManager.NavigateTo("/acount/login", forceLoad:true);
+        // }
+    }
+} *@
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (!user.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("/account/login", true);
+        }
+    }
+}

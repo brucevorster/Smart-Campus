@@ -1,0 +1,63 @@
+﻿@using UmojaCampus.Shared.Resources
+<div class="modal" 
+	 tabindex="-1" 
+	 id="deleteModal" 
+	 data-bs-backdrop="static" 
+	 data-bs-keyboard="false">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header px-4">
+				<h3 class="modal-title">
+					@Resource.DeleteTitle
+				</h3>
+			</div>
+			<div class="modal-body px-4">
+				<div class="d-flex">
+					<div class="flex-shrink-0">
+						<i class="fa-solid fa-circle-exclamation text-danger display-6"></i>
+					</div>
+					<div class="flex-grow-1 ms-3">
+						<p>
+							<b>@Resource.Warning: </b>
+							'@RecordName'
+							<span class="ms-1">@ErrorResource.DeleteRecordWarning</span>
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer px-4">
+				<button type="button" 
+						class="btn btn-outline-dark" 
+						data-bs-dismiss="modal"
+						style="min-width:80px;">@Resource.NoButton</button>
+				<button type="button" 
+						class="btn btn-danger"
+						style="min-width:80px;"
+						@onclick="ConfirmDelete">@Resource.YesButton</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+@code {
+	[Parameter]
+	public string ModalId { get; set;  }
+
+	[Parameter] 
+	public Guid RecordId { get; set; }
+
+	[Parameter]
+	public string RecordName { get; set;  }
+
+	[Parameter] 
+	public EventCallback<Guid> OnDeleteConfirmed { get; set; }
+
+	[Parameter]
+	public EventCallback<string> OnDeleteRecordName { get; set; }
+
+	private async Task ConfirmDelete()
+	{
+		await OnDeleteConfirmed.InvokeAsync(RecordId);
+		await OnDeleteRecordName.InvokeAsync(RecordName);
+	}
+}

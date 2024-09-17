@@ -1,0 +1,62 @@
+﻿@page "/qualifications"
+@attribute [Authorize]
+
+<PageTitle>Qualifications</PageTitle>
+
+@if(IsLoading)
+{
+	<Loading />
+}
+else if(!IsLoading && ApiError)
+{
+	<ApiError ErrorMessage="@ErrorMessage" />
+}
+else
+{
+	<div class="row">
+		<div class="col-12">
+			<DismissibleAlert Message="@AlertMessage" Visible="@AlertVisible"></DismissibleAlert>
+			<div class="card">
+				<div class="card-header">
+					<h3 class="card-title mb-0">
+						Qualifications
+						<span class="float-end">
+							<a href="/qualifications/submit" class="btn btn-primary">
+								<i class="fa-solid fa-plus me-1"></i>
+								@Resource.Add
+							</a>
+						</span>
+					</h3>
+				</div>
+				<div class="card-body">
+					<Search SearchInput="@SearchTerm" SearchChanged="@OnSearchChanged" />
+					<QuickGrid Items="@FilteredItems" Pagination="@Pagination" Class="table table-striped table-borderless border-top">
+						<TemplateColumn Title="Name" SortBy="@NameSort" Class="gridBig">
+							@context.Name
+						</TemplateColumn>
+			
+						<PropertyColumn Title="From Date" Property="@(c => c.FromDate.ToString("dd-MM-yyyy"))" />
+						<PropertyColumn Title="To Date" Property="@(c => c.ToDate.ToString("dd-MM-yyyy"))" />
+						<PropertyColumn Title="Duration" Property="@(c => c.Duration)" />
+						<PropertyColumn Title="Fees" Property="@(c => c.Fees)" />
+						<TemplateColumn Title="Actions">
+							<a href="@($"/qualifications/submit/{context.Id}")" 
+							   class="me-2">
+								<i class="fa-solid fa-file-pen"></i>
+							</a>
+							<span class="text-danger">
+								<i class="fa-solid fa-trash pointer"
+									@onclick="() => ShowDeleteModal(context.Id, context.Name)"></i>
+							</span>
+						</TemplateColumn>
+					</QuickGrid>
+					<Paginator State="@Pagination" />
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+<DeleteModal RecordId="@SelectedRecordId"
+	RecordName="@SelectedRecordName"
+	OnDeleteConfirmed="DeleteRecord"></DeleteModal>
